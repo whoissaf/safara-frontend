@@ -82,7 +82,7 @@ class SafaraApp extends StatelessWidget {
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(AppBorderRadius.md),
-            borderSide: const BorderSide(color: AppColors.primary, width: 2),
+            borderSide: BorderSide(color: AppColors.primary, width: 2),
           ),
         ),
         elevatedButtonTheme: ElevatedButtonThemeData(

@@ -1,34 +1,20 @@
 import 'package:flutter/material.dart';
 import '../core/constants.dart';
-import '../services/auth_service.dart';
 import 'location_detail_screen.dart';
 
-class HomeTab extends StatefulWidget {
+class HomeTab extends StatelessWidget {
   const HomeTab({super.key});
 
-  @override
-  State<HomeTab> createState() => _HomeTabState();
-}
-
-class _HomeTabState extends State<HomeTab> {
-  String _userName = 'Traveler';
-  bool _isLoading = true;
-
-  @override
-  void initState() {
-    super.initState();
-    _loadUserName();
-  }
-
-  Future<void> _loadUserName() async {
-    final name = await AuthService.getUserName();
-    if (mounted) {
-      setState(() {
-        _userName = name ?? 'Traveler';
-        _isLoading = false;
-      });
-    }
-  }
+  final List<Map<String, dynamic>> _trendingLocations = const [
+    {'name': 'Monas, Jakarta', 'level': 'Yellow', 'color': AppColors.yellow},
+    {'name': 'Bundaran HI', 'level': 'Green', 'color': AppColors.green},
+    {'name': 'Kota Tua', 'level': 'Orange', 'color': AppColors.orange},
+    {'name': 'Malioboro', 'level': 'Green', 'color': AppColors.green},
+    {'name': 'Pantai Kuta', 'level': 'Yellow', 'color': AppColors.yellow},
+    {'name': 'Borobudur', 'level': 'Green', 'color': AppColors.green},
+    {'name': 'Puncak Bogor', 'level': 'Orange', 'color': AppColors.orange},
+    {'name': 'Ancol Jakarta', 'level': 'Red', 'color': AppColors.red},
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -38,19 +24,16 @@ class _HomeTabState extends State<HomeTab> {
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
-        title: Column(
+        title: const Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Hello, $_userName',
-              style: Theme.of(context).textTheme.bodyMedium,
+              'Hello, Traveler',
+              style: TextStyle(fontSize: 14, color: AppColors.textSecondary),
             ),
-            const Text(
+            Text(
               'Safara',
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-              ),
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
           ],
         ),
@@ -87,9 +70,7 @@ class _HomeTabState extends State<HomeTab> {
                     _buildSectionTitle(context, 'Latest Advisory'),
                     const SizedBox(height: AppSpacing.lg),
                     GestureDetector(
-                      onTap: () {
-                        // Navigate to advisory detail
-                      },
+                      onTap: () {},
                       child: _buildLatestAdvisory(context),
                     ),
                   ],
@@ -110,11 +91,11 @@ class _HomeTabState extends State<HomeTab> {
         boxShadow: AppShadows.card,
       ),
       child: TextField(
-        decoration: InputDecoration(
+        decoration: const InputDecoration(
           hintText: 'Search location...',
-          prefixIcon: const Icon(Icons.search_rounded),
+          prefixIcon: Icon(Icons.search_rounded),
           border: InputBorder.none,
-          contentPadding: const EdgeInsets.symmetric(
+          contentPadding: EdgeInsets.symmetric(
             horizontal: AppSpacing.lg,
             vertical: AppSpacing.md,
           ),
@@ -132,9 +113,7 @@ class _HomeTabState extends State<HomeTab> {
           style: Theme.of(context).textTheme.titleLarge,
         ),
         TextButton(
-          onPressed: () {
-            // Navigate to see all
-          },
+          onPressed: () {},
           child: const Text('See All'),
         ),
       ],
@@ -147,12 +126,13 @@ class _HomeTabState extends State<HomeTab> {
       physics: const NeverScrollableScrollPhysics(),
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
-        childAspectRatio: cardWidth / 220,
+        childAspectRatio: cardWidth / 240,
         crossAxisSpacing: AppSpacing.lg,
         mainAxisSpacing: AppSpacing.lg,
       ),
-      itemCount: 4,
+      itemCount: _trendingLocations.length,
       itemBuilder: (context, index) {
+        final location = _trendingLocations[index];
         return GestureDetector(
           onTap: () {
             Navigator.push(
@@ -160,13 +140,13 @@ class _HomeTabState extends State<HomeTab> {
               MaterialPageRoute(builder: (context) => const LocationDetailScreen()),
             );
           },
-          child: _buildLocationCard(context),
+          child: _buildLocationCard(context, location),
         );
       },
     );
   }
   
-  Widget _buildLocationCard(BuildContext context) {
+  Widget _buildLocationCard(BuildContext context, Map<String, dynamic> location) {
     return Container(
       decoration: BoxDecoration(
         color: AppColors.surface,
@@ -181,15 +161,15 @@ class _HomeTabState extends State<HomeTab> {
             flex: 2,
             child: Container(
               decoration: BoxDecoration(
-                color: AppColors.primary.withOpacity(0.1),
+                color: (location['color'] as Color).withOpacity(0.1),
                 borderRadius: const BorderRadius.vertical(
                   top: Radius.circular(AppBorderRadius.lg),
                 ),
               ),
-              child: const Icon(
+              child: Icon(
                 Icons.location_on_rounded,
                 size: 60,
-                color: AppColors.primary,
+                color: location['color'] as Color,
               ),
             ),
           ),
@@ -198,9 +178,9 @@ class _HomeTabState extends State<HomeTab> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
-                  'Monas, Jakarta',
-                  style: TextStyle(
+                Text(
+                  location['name'] as String,
+                  style: const TextStyle(
                     fontWeight: FontWeight.w600,
                     fontSize: 14,
                   ),
@@ -214,13 +194,13 @@ class _HomeTabState extends State<HomeTab> {
                     vertical: AppSpacing.xs,
                   ),
                   decoration: BoxDecoration(
-                    color: AppColors.yellow.withOpacity(0.1),
+                    color: (location['color'] as Color).withOpacity(0.1),
                     borderRadius: BorderRadius.circular(AppBorderRadius.sm),
                   ),
-                  child: const Text(
-                    'Yellow',
+                  child: Text(
+                    '${location['level']} - Attention',
                     style: TextStyle(
-                      color: AppColors.yellow,
+                      color: location['color'] as Color,
                       fontSize: 11,
                       fontWeight: FontWeight.w600,
                     ),
@@ -254,18 +234,18 @@ class _HomeTabState extends State<HomeTab> {
                   color: AppColors.yellow.withOpacity(0.1),
                   borderRadius: BorderRadius.circular(AppBorderRadius.md),
                 ),
-                child: Icon(
+                child: const Icon(
                   Icons.info_outline_rounded,
                   color: AppColors.yellow,
                   size: 24,
                 ),
               ),
               const SizedBox(width: AppSpacing.md),
-              Expanded(
+              const Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
+                    Text(
                       'Travel Advisory',
                       style: TextStyle(
                         fontWeight: FontWeight.w600,
@@ -274,7 +254,7 @@ class _HomeTabState extends State<HomeTab> {
                     ),
                     Text(
                       'Jakarta, Indonesia',
-                      style: Theme.of(context).textTheme.bodyMedium,
+                      style: TextStyle(fontSize: 14, color: AppColors.textSecondary),
                     ),
                   ],
                 ),
@@ -286,9 +266,9 @@ class _HomeTabState extends State<HomeTab> {
             ],
           ),
           const SizedBox(height: AppSpacing.md),
-          Text(
+          const Text(
             'Stay alert in crowded areas. Recent reports of petty theft in tourist zones.',
-            style: Theme.of(context).textTheme.bodyMedium,
+            style: TextStyle(fontSize: 14, color: AppColors.textSecondary),
           ),
         ],
       ),
