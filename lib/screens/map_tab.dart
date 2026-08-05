@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_map/flutter_map.dart';
+import 'package:latlong2/latlong.dart';
 import '../core/constants.dart';
+import 'location_detail_screen.dart';
 
 class MapTab extends StatelessWidget {
   const MapTab({super.key});
@@ -18,30 +21,78 @@ class MapTab extends StatelessWidget {
       ),
       body: Stack(
         children: [
-          Container(
-            color: AppColors.background,
-            child: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(
-                    Icons.map_rounded,
-                    size: 100,
-                    color: AppColors.textTertiary,
+          FlutterMap(
+            options: const MapOptions(
+              initialCenter: LatLng(-6.2088, 106.8456), // Jakarta
+              initialZoom: 10.0,
+            ),
+            children: [
+              TileLayer(
+                urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                userAgentPackageName: 'com.safara.app',
+              ),
+              MarkerLayer(
+                markers: [
+                  // Monas - Yellow
+                  Marker(
+                    width: 80.0,
+                    height: 80.0,
+                    point: const LatLng(-6.1754, 106.8272),
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => const LocationDetailScreen()),
+                        );
+                      },
+                      child: const Icon(
+                        Icons.location_on_rounded,
+                        color: AppColors.yellow,
+                        size: 40,
+                      ),
+                    ),
                   ),
-                  const SizedBox(height: AppSpacing.lg),
-                  Text(
-                    'Interactive Map',
-                    style: Theme.of(context).textTheme.titleLarge,
+                  // Bundaran HI - Green
+                  Marker(
+                    width: 80.0,
+                    height: 80.0,
+                    point: const LatLng(-6.1944, 106.8229),
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => const LocationDetailScreen()),
+                        );
+                      },
+                      child: const Icon(
+                        Icons.location_on_rounded,
+                        color: AppColors.green,
+                        size: 40,
+                      ),
+                    ),
                   ),
-                  const SizedBox(height: AppSpacing.sm),
-                  Text(
-                    'Map integration coming soon',
-                    style: Theme.of(context).textTheme.bodyMedium,
+                  // Kota Tua - Orange
+                  Marker(
+                    width: 80.0,
+                    height: 80.0,
+                    point: const LatLng(-6.1352, 106.8133),
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => const LocationDetailScreen()),
+                        );
+                      },
+                      child: const Icon(
+                        Icons.location_on_rounded,
+                        color: AppColors.orange,
+                        size: 40,
+                      ),
+                    ),
                   ),
                 ],
               ),
-            ),
+            ],
           ),
           Positioned(
             bottom: AppSpacing.xxl,

@@ -1,9 +1,34 @@
 import 'package:flutter/material.dart';
 import '../core/constants.dart';
+import '../services/auth_service.dart';
 import 'location_detail_screen.dart';
 
-class HomeTab extends StatelessWidget {
+class HomeTab extends StatefulWidget {
   const HomeTab({super.key});
+
+  @override
+  State<HomeTab> createState() => _HomeTabState();
+}
+
+class _HomeTabState extends State<HomeTab> {
+  String _userName = 'Traveler';
+  bool _isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserName();
+  }
+
+  Future<void> _loadUserName() async {
+    final name = await AuthService.getUserName();
+    if (mounted) {
+      setState(() {
+        _userName = name ?? 'Traveler';
+        _isLoading = false;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +42,7 @@ class HomeTab extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Hello, Traveler',
+              'Hello, $_userName',
               style: Theme.of(context).textTheme.bodyMedium,
             ),
             const Text(

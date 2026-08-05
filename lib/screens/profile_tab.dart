@@ -1,8 +1,71 @@
 import 'package:flutter/material.dart';
 import '../core/constants.dart';
+import '../services/auth_service.dart';
 
-class ProfileTab extends StatelessWidget {
+class ProfileTab extends StatefulWidget {
   const ProfileTab({super.key});
+
+  @override
+  State<ProfileTab> createState() => _ProfileTabState();
+}
+
+class _ProfileTabState extends State<ProfileTab> {
+  String _userName = 'Traveler';
+  String _userEmail = 'traveler@safara.com';
+  bool _isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserData();
+  }
+
+  Future<void> _loadUserData() async {
+    final userData = await AuthService.getUserData();
+    if (mounted) {
+      setState(() {
+        _userName = userData?['name'] ?? 'Traveler';
+        _userEmail = userData?['email'] ?? 'traveler@safara.com';
+        _isLoading = false;
+      });
+    }
+  }
+
+  Future<void> _handleLogout() async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Logout'),
+        content: const Text('Are you sure you want to logout?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text('Cancel'),
+          ),
+          ElevatedButton(
+            onPressed: () => Navigator.pop(context, true),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppColors.error,
+            ),
+            child: const Text('Logout'),
+          ),
+        ],
+      ),
+    );
+
+    if (confirmed == true) {
+      await AuthService.logout();
+      if (mounted) {
+        // Navigate to login screen (you'll need to create this)
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Logged out successfully'),
+            backgroundColor: AppColors.success,
+          ),
+        );
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +85,7 @@ class ProfileTab extends StatelessWidget {
                     end: Alignment.bottomRight,
                   ),
                 ),
-                child: const Center(
+                child: Center(
                   child: CircleAvatar(
                     radius: 50,
                     backgroundColor: Colors.white,
@@ -42,15 +105,15 @@ class ProfileTab extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    'Traveler',
-                    style: TextStyle(
+                  Text(
+                    _userName,
+                    style: const TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                   Text(
-                    'traveler@safara.com',
+                    _userEmail,
                     style: Theme.of(context).textTheme.bodyMedium,
                   ),
                   const SizedBox(height: AppSpacing.xxl),
@@ -62,7 +125,7 @@ class ProfileTab extends StatelessWidget {
                   SizedBox(
                     width: double.infinity,
                     child: OutlinedButton.icon(
-                      onPressed: () {},
+                      onPressed: _handleLogout,
                       icon: const Icon(Icons.logout_rounded),
                       label: const Text('Logout'),
                       style: OutlinedButton.styleFrom(
