@@ -12,14 +12,25 @@ class ReportTab extends StatefulWidget {
 class _ReportTabState extends State<ReportTab> {
   final _formKey = GlobalKey<FormState>();
   bool _isLoading = false;
+  String? _selectedCategory;
+  
+  final List<String> _categories = [
+    'Theft',
+    'Scam',
+    'Violence',
+    'Natural Disaster',
+    'Traffic Accident',
+    'Health Emergency',
+    'Other'
+  ];
 
-  final _categoryController = TextEditingController(text: 'Theft');
-  final _titleController = TextEditingController(text: 'Dompet hilang di area Monas');
-  final _descriptionController = TextEditingController(text: 'Saya kehilangan dompet di dekat pintu masuk utara Monas sekitar pukul 14.00.');
+  final _locationController = TextEditingController();
+  final _titleController = TextEditingController();
+  final _descriptionController = TextEditingController();
 
   @override
   void dispose() {
-    _categoryController.dispose();
+    _locationController.dispose();
     _titleController.dispose();
     _descriptionController.dispose();
     super.dispose();
@@ -27,6 +38,15 @@ class _ReportTabState extends State<ReportTab> {
 
   Future<void> _submitReport() async {
     if (!_formKey.currentState!.validate()) return;
+    if (_selectedCategory == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Please select a category'),
+          backgroundColor: AppColors.red,
+        ),
+      );
+      return;
+    }
 
     setState(() {
       _isLoading = true;
@@ -35,7 +55,7 @@ class _ReportTabState extends State<ReportTab> {
     final result = await ApiService.submitReport(
       userId: AppConstants.seedUserId,
       locationId: AppConstants.seedLocationId,
-      category: _categoryController.text,
+      category: _selectedCategory!,
       title: _titleController.text,
       description: _descriptionController.text,
     );
@@ -46,22 +66,22 @@ class _ReportTabState extends State<ReportTab> {
 
     if (result['success'] == true) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: const Text('Report submitted successfully!'),
+        const SnackBar(
+          content: Text('Report submitted successfully!'),
           backgroundColor: AppColors.green,
-          behavior: SnackBarBehavior.floating,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppBorderRadius.md)),
         ),
       );
+      _locationController.clear();
       _titleController.clear();
       _descriptionController.clear();
+      setState(() {
+        _selectedCategory = null;
+      });
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(result['message'] ?? 'Failed to submit report'),
           backgroundColor: AppColors.red,
-          behavior: SnackBarBehavior.floating,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppBorderRadius.md)),
         ),
       );
     }
@@ -92,14 +112,39 @@ class _ReportTabState extends State<ReportTab> {
                       ),
                       const SizedBox(height: AppSpacing.lg),
                       TextFormField(
-                        controller: _categoryController,
+                        controller: _locationController,
+                        decoration: const InputDecoration(
+                          labelText: 'Location',
+                          prefixIcon: Icon(Icons.location_on_rounded),
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Location is required';
+                          }
+                          return null;
+                        },
+                      ),
+                      const SizedBox(height: AppSpacing.lg),
+                      DropdownButtonFormField<String>(
+                        value: _selectedCategory,
                         decoration: const InputDecoration(
                           labelText: 'Category',
                           prefixIcon: Icon(Icons.category_rounded),
                         ),
+                        items: _categories.map((category) {
+                          return DropdownMenuItem(
+                            value: category,
+                            child: Text(category),
+                          );
+                        }).toList(),
+                        onChanged: (value) {
+                          setState(() {
+                            _selectedCategory = value;
+                          });
+                        },
                         validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Category is required';
+                          if (value == null) {
+                            return 'Please select a category';
                           }
                           return null;
                         },

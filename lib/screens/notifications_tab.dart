@@ -38,6 +38,15 @@ class NotificationsTab extends StatelessWidget {
               '2h ago',
               style: Theme.of(context).textTheme.bodySmall,
             ),
+            onTap: () {
+              // Navigate to notification detail
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('Notification detail: Jakarta status updated to Yellow - Stay alert in crowded areas'),
+                  duration: Duration(seconds: 3),
+                ),
+              );
+            },
           );
         },
       ),

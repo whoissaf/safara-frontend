@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
 import '../core/constants.dart';
+import 'location_detail_screen.dart';
 
 class HomeTab extends StatelessWidget {
   const HomeTab({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final cardWidth = (screenWidth - (AppSpacing.lg * 3)) / 2;
+
     return Scaffold(
+      backgroundColor: AppColors.background,
       appBar: AppBar(
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -52,11 +57,16 @@ class HomeTab extends StatelessWidget {
                     const SizedBox(height: AppSpacing.xxl),
                     _buildSectionTitle(context, 'Trending Locations'),
                     const SizedBox(height: AppSpacing.lg),
-                    _buildTrendingLocations(context),
+                    _buildTrendingLocations(context, cardWidth),
                     const SizedBox(height: AppSpacing.xxl),
                     _buildSectionTitle(context, 'Latest Advisory'),
                     const SizedBox(height: AppSpacing.lg),
-                    _buildLatestAdvisory(context),
+                    GestureDetector(
+                      onTap: () {
+                        // Navigate to advisory detail
+                      },
+                      child: _buildLatestAdvisory(context),
+                    ),
                   ],
                 ),
               ),
@@ -97,30 +107,42 @@ class HomeTab extends StatelessWidget {
           style: Theme.of(context).textTheme.titleLarge,
         ),
         TextButton(
-          onPressed: () {},
+          onPressed: () {
+            // Navigate to see all
+          },
           child: const Text('See All'),
         ),
       ],
     );
   }
   
-  Widget _buildTrendingLocations(BuildContext context) {
-    return SizedBox(
-      height: 220,
-      child: ListView.separated(
-        scrollDirection: Axis.horizontal,
-        itemCount: 5,
-        separatorBuilder: (context, index) => const SizedBox(width: AppSpacing.lg),
-        itemBuilder: (context, index) {
-          return _buildLocationCard(context);
-        },
+  Widget _buildTrendingLocations(BuildContext context, double cardWidth) {
+    return GridView.builder(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+        childAspectRatio: cardWidth / 220,
+        crossAxisSpacing: AppSpacing.lg,
+        mainAxisSpacing: AppSpacing.lg,
       ),
+      itemCount: 4,
+      itemBuilder: (context, index) {
+        return GestureDetector(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const LocationDetailScreen()),
+            );
+          },
+          child: _buildLocationCard(context),
+        );
+      },
     );
   }
   
   Widget _buildLocationCard(BuildContext context) {
     return Container(
-      width: 180,
       decoration: BoxDecoration(
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(AppBorderRadius.lg),
@@ -131,6 +153,7 @@ class HomeTab extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Expanded(
+            flex: 2,
             child: Container(
               decoration: BoxDecoration(
                 color: AppColors.primary.withOpacity(0.1),
@@ -140,7 +163,7 @@ class HomeTab extends StatelessWidget {
               ),
               child: const Icon(
                 Icons.location_on_rounded,
-                size: 80,
+                size: 60,
                 color: AppColors.primary,
               ),
             ),
@@ -151,11 +174,13 @@ class HomeTab extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const Text(
-                  'Location Name',
+                  'Monas, Jakarta',
                   style: TextStyle(
                     fontWeight: FontWeight.w600,
                     fontSize: 14,
                   ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                 ),
                 const SizedBox(height: AppSpacing.xs),
                 Container(
@@ -164,14 +189,14 @@ class HomeTab extends StatelessWidget {
                     vertical: AppSpacing.xs,
                   ),
                   decoration: BoxDecoration(
-                    color: AppColors.green.withOpacity(0.1),
+                    color: AppColors.yellow.withOpacity(0.1),
                     borderRadius: BorderRadius.circular(AppBorderRadius.sm),
                   ),
-                  child: Text(
-                    'Green - Normal',
+                  child: const Text(
+                    'Yellow',
                     style: TextStyle(
-                      color: AppColors.green,
-                      fontSize: 12,
+                      color: AppColors.yellow,
+                      fontSize: 11,
                       fontWeight: FontWeight.w600,
                     ),
                   ),
