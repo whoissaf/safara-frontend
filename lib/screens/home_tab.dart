@@ -40,15 +40,15 @@ class HomeTab extends StatelessWidget {
               padding: const EdgeInsets.all(AppSpacing.lg),
               decoration: BoxDecoration(
                 color: NeoColors.accent,
-                border: Border.all(color: NeoColors.black, width: 3),
+                border: NeoBorders.thick,
                 boxShadow: NeoShadows.hard,
                 borderRadius: BorderRadius.circular(AppRadius.md),
               ),
-              child: Column(
+              child: const Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text('Hello, Traveler', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700)),
-                  const SizedBox(height: AppSpacing.sm),
+                  SizedBox(height: AppSpacing.sm),
                   Text('Where are you going today?', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w900)),
                 ],
               ),
@@ -57,7 +57,7 @@ class HomeTab extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('Trending Locations', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900)),
+                const Text('Trending Locations', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900)),
                 TextButton(onPressed: () {}, child: const Text('See All', style: TextStyle(fontWeight: FontWeight.w900))),
               ],
             ),
@@ -91,7 +91,7 @@ class HomeTab extends StatelessWidget {
                           child: Container(
                             decoration: BoxDecoration(
                               color: (loc['color'] as Color).withOpacity(0.3),
-                              border: const Border(bottom: NeoBorders.thick),
+                              border: const Border(bottom: NeoBorders.thickSide),
                               borderRadius: const BorderRadius.vertical(top: Radius.circular(AppRadius.md)),
                             ),
                             child: Center(child: Icon(Icons.location_on, size: 40, color: loc['color'] as Color)),
@@ -109,7 +109,7 @@ class HomeTab extends StatelessWidget {
                                 const SizedBox(height: 4),
                                 Container(
                                   padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                                  decoration: BoxDecoration(color: loc['color'] as Color, border: Border.all(color: NeoColors.black, width: 2)),
+                                  decoration: BoxDecoration(color: loc['color'] as Color, border: NeoBorders.thin),
                                   child: Text('${loc['level']}', style: const TextStyle(fontSize: 10, fontWeight: FontWeight.w900)),
                                 ),
                               ],
@@ -123,7 +123,7 @@ class HomeTab extends StatelessWidget {
               },
             ),
             const SizedBox(height: AppSpacing.xl),
-            Text('Latest Advisory', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900)),
+            const Text('Latest Advisory', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900)),
             const SizedBox(height: AppSpacing.md),
             Container(
               padding: const EdgeInsets.all(AppSpacing.lg),

@@ -31,13 +31,13 @@ class _ReportTabState extends State<ReportTab> {
       context: context,
       builder: (context) => AlertDialog(
         backgroundColor: NeoColors.surface,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppRadius.md), side: NeoBorders.thick),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppRadius.md), side: NeoBorders.thickSide),
         title: Text(title, style: const TextStyle(fontWeight: FontWeight.w900)),
         content: Text(message),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            style: TextButton.styleFrom(backgroundColor: isSuccess ? NeoColors.green : NeoColors.red, foregroundColor: NeoColors.surface, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppRadius.sm), side: NeoBorders.thin)),
+            style: TextButton.styleFrom(backgroundColor: isSuccess ? NeoColors.green : NeoColors.red, foregroundColor: NeoColors.surface, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppRadius.sm), side: NeoBorders.thinSide)),
             child: const Text('OK', style: TextStyle(fontWeight: FontWeight.w900)),
           ),
         ],

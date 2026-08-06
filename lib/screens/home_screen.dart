@@ -22,7 +22,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       body: IndexedStack(index: _currentIndex, children: _screens),
       bottomNavigationBar: Container(
-        decoration: BoxDecoration(border: const Border(top: NeoBorders.thick), color: NeoColors.surface),
+        decoration: BoxDecoration(border: const Border(top: NeoBorders.thickSide), color: NeoColors.surface),
         child: BottomNavigationBar(
           currentIndex: _currentIndex,
           onTap: (i) => setState(() => _currentIndex = i),
