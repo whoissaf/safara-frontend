@@ -1,4 +1,6 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import '../core/constants.dart';
 import '../services/api_service.dart';
 
@@ -13,6 +15,9 @@ class _ReportTabState extends State<ReportTab> {
   final _formKey = GlobalKey<FormState>();
   bool _isLoading = false;
   String? _selectedCategory;
+  File? _selectedImage;
+  final ImagePicker _picker = ImagePicker();
+  
   final List<String> _categories = ['Theft', 'Scam', 'Violence', 'Natural Disaster', 'Traffic Accident', 'Health Emergency', 'Other'];
   final _locationController = TextEditingController();
   final _titleController = TextEditingController();
@@ -24,6 +29,15 @@ class _ReportTabState extends State<ReportTab> {
     _titleController.dispose();
     _descriptionController.dispose();
     super.dispose();
+  }
+
+  Future<void> _pickImage() async {
+    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+    if (image != null) {
+      setState(() {
+        _selectedImage = File(image.path);
+      });
+    }
   }
 
   void _showAlert(String title, String message, bool isSuccess) {
@@ -65,7 +79,10 @@ class _ReportTabState extends State<ReportTab> {
       _locationController.clear();
       _titleController.clear();
       _descriptionController.clear();
-      setState(() => _selectedCategory = null);
+      setState(() {
+        _selectedCategory = null;
+        _selectedImage = null;
+      });
     } else {
       _showAlert('Failed', result['message'] ?? 'Failed to submit report.', false);
     }
@@ -93,6 +110,17 @@ class _ReportTabState extends State<ReportTab> {
                     TextFormField(controller: _titleController, decoration: const InputDecoration(labelText: 'Title', border: OutlineInputBorder()), validator: (v) => v == null || v.isEmpty ? 'Required' : null),
                     const SizedBox(height: AppSpacing.md),
                     TextFormField(controller: _descriptionController, maxLines: 4, decoration: const InputDecoration(labelText: 'Description', border: OutlineInputBorder(), alignLabelWithHint: true), validator: (v) => v == null || v.isEmpty ? 'Required' : null),
+                    const SizedBox(height: AppSpacing.md),
+                    GestureDetector(
+                      onTap: _pickImage,
+                      child: Container(
+                        height: 120,
+                        decoration: BoxDecoration(color: NeoColors.background, border: NeoBorders.thin, borderRadius: BorderRadius.circular(AppRadius.md)),
+                        child: _selectedImage == null 
+                          ? const Column(mainAxisAlignment: MainAxisAlignment.center, children: [Icon(Icons.add_photo_alternate, size: 40), SizedBox(height: 8), Text('Upload Photo (Optional)')])
+                          : ClipRRect(borderRadius: BorderRadius.circular(AppRadius.md), child: Image.file(_selectedImage!, fit: BoxFit.cover)),
+                      ),
+                    ),
                     const SizedBox(height: AppSpacing.xl),
                     SizedBox(width: double.infinity, height: 50, child: ElevatedButton(onPressed: _isLoading ? null : _submitReport, child: Text(_isLoading ? 'SUBMITTING...' : 'SUBMIT REPORT'))),
                   ],

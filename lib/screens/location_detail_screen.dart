@@ -4,6 +4,13 @@ import '../core/constants.dart';
 class LocationDetailScreen extends StatelessWidget {
   const LocationDetailScreen({super.key});
 
+  final List<Map<String, String>> _timeline = const [
+    {'date': '02-08-2026 23:25', 'type': 'Community Report', 'status': 'Submitted'},
+    {'date': '02-08-2026 23:30', 'type': 'Moderator Approval', 'status': 'Verified'},
+    {'date': '02-08-2026 23:35', 'type': 'Attestation', 'status': 'On-chain'},
+    {'date': '02-08-2026 23:40', 'type': 'AI Analysis', 'status': 'Generated'},
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -13,7 +20,7 @@ class LocationDetailScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Monas, Jakarta', style: TextStyle(fontSize: 28, fontWeight: FontWeight.w900)),
+            const Text('Monas, Jakarta', style: TextStyle(fontSize: 28, fontWeight: FontWeight.w900)),
             const SizedBox(height: AppSpacing.lg),
             
             Container(
@@ -71,6 +78,50 @@ class LocationDetailScreen extends StatelessWidget {
                     Text('Data ini telah diverifikasi secara kriptografis.', style: TextStyle(fontSize: 12)),
                   ])),
                 ],
+              ),
+            ),
+            const SizedBox(height: AppSpacing.lg),
+
+            const Text('EVIDENCE TIMELINE', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900)),
+            const SizedBox(height: AppSpacing.md),
+            Container(
+              padding: const EdgeInsets.all(AppSpacing.lg),
+              decoration: BoxDecoration(color: NeoColors.surface, border: NeoBorders.thick, boxShadow: NeoShadows.small, borderRadius: BorderRadius.circular(AppRadius.md)),
+              child: Column(
+                children: List.generate(_timeline.length, (index) {
+                  final event = _timeline[index];
+                  final isLast = index == _timeline.length - 1;
+                  return Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Column(
+                        children: [
+                          Container(width: 12, height: 12, decoration: BoxDecoration(color: NeoColors.primary, shape: BoxShape.circle, border: NeoBorders.thin)),
+                          if (!isLast) Container(width: 2, height: 40, color: NeoColors.black),
+                        ],
+                      ),
+                      const SizedBox(width: AppSpacing.md),
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.only(bottom: AppSpacing.lg),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(event['type']!, style: const TextStyle(fontWeight: FontWeight.w900)),
+                              Text(event['date']!, style: const TextStyle(fontSize: 12, color: NeoColors.text)),
+                              Container(
+                                margin: const EdgeInsets.only(top: 4),
+                                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                                decoration: BoxDecoration(color: NeoColors.accent, border: NeoBorders.thin),
+                                child: Text(event['status']!, style: const TextStyle(fontSize: 10, fontWeight: FontWeight.w900)),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  );
+                }),
               ),
             ),
           ],

@@ -2,10 +2,19 @@ import 'package:flutter/material.dart';
 import '../core/constants.dart';
 import 'location_detail_screen.dart';
 
-class HomeTab extends StatelessWidget {
+class HomeTab extends StatefulWidget {
   const HomeTab({super.key});
 
-  final List<Map<String, dynamic>> _locations = const [
+  @override
+  State<HomeTab> createState() => _HomeTabState();
+}
+
+class _HomeTabState extends State<HomeTab> {
+  final TextEditingController _searchController = TextEditingController();
+  String _searchQuery = '';
+  List<String> _activeFilters = [];
+
+  final List<Map<String, dynamic>> _allLocations = const [
     {'name': 'Monas, Jakarta', 'level': 'Yellow', 'color': NeoColors.yellow},
     {'name': 'Bundaran HI', 'level': 'Green', 'color': NeoColors.green},
     {'name': 'Kota Tua', 'level': 'Orange', 'color': NeoColors.orange},
@@ -16,12 +25,74 @@ class HomeTab extends StatelessWidget {
     {'name': 'Ancol Jakarta', 'level': 'Red', 'color': NeoColors.red},
   ];
 
+  List<Map<String, dynamic>> get _filteredLocations {
+    return _allLocations.where((loc) {
+      bool matchesSearch = loc['name'].toString().toLowerCase().contains(_searchQuery.toLowerCase());
+      bool matchesFilter = _activeFilters.isEmpty || _activeFilters.contains(loc['level']);
+      return matchesSearch && matchesFilter;
+    }).toList();
+  }
+
+  void _showFilterSheet() {
+    showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(AppRadius.lg))),
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setModalState) {
+            return Container(
+              padding: const EdgeInsets.all(AppSpacing.lg),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text('Filter by Attention Level', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900)),
+                  const SizedBox(height: AppSpacing.lg),
+                  ...['Green', 'Yellow', 'Orange', 'Red'].map((level) {
+                    return CheckboxListTile(
+                      title: Text(level, style: const TextStyle(fontWeight: FontWeight.w700)),
+                      value: _activeFilters.contains(level),
+                      onChanged: (bool? value) {
+                        setModalState(() {
+                          if (value == true) {
+                            _activeFilters.add(level);
+                          } else {
+                            _activeFilters.remove(level);
+                          }
+                        });
+                        setState(() {});
+                      },
+                    );
+                  }),
+                  const SizedBox(height: AppSpacing.md),
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: const Text('APPLY FILTER'),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Safara'),
         actions: [
+          IconButton(
+            icon: const Icon(Icons.filter_list),
+            onPressed: _showFilterSheet,
+          ),
           Padding(
             padding: const EdgeInsets.only(right: AppSpacing.md),
             child: CircleAvatar(
@@ -54,6 +125,28 @@ class HomeTab extends StatelessWidget {
               ),
             ),
             const SizedBox(height: AppSpacing.xl),
+            Container(
+              decoration: BoxDecoration(
+                color: NeoColors.surface,
+                border: NeoBorders.thick,
+                borderRadius: BorderRadius.circular(AppRadius.md),
+              ),
+              child: TextField(
+                controller: _searchController,
+                decoration: const InputDecoration(
+                  hintText: 'Search Location, City, Country...',
+                  prefixIcon: Icon(Icons.search),
+                  border: InputBorder.none,
+                  contentPadding: EdgeInsets.all(AppSpacing.md),
+                ),
+                onChanged: (value) {
+                  setState(() {
+                    _searchQuery = value;
+                  });
+                },
+              ),
+            ),
+            const SizedBox(height: AppSpacing.lg),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -71,9 +164,9 @@ class HomeTab extends StatelessWidget {
                 mainAxisSpacing: AppSpacing.md,
                 childAspectRatio: 0.85,
               ),
-              itemCount: _locations.length,
+              itemCount: _filteredLocations.length,
               itemBuilder: (context, index) {
-                final loc = _locations[index];
+                final loc = _filteredLocations[index];
                 return GestureDetector(
                   onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const LocationDetailScreen())),
                   child: Container(
