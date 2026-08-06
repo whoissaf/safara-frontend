@@ -20,8 +20,22 @@ class NeoColors {
 }
 
 class NeoBorders {
-  static const BorderSide thick = BorderSide(color: NeoColors.black, width: 3);
-  static const BorderSide thin = BorderSide(color: NeoColors.black, width: 2);
+  static const BorderSide thickSide = BorderSide(color: NeoColors.black, width: 3);
+  static const BorderSide thinSide = BorderSide(color: NeoColors.black, width: 2);
+  
+  static const Border thick = Border(
+    top: thickSide,
+    bottom: thickSide,
+    left: thickSide,
+    right: thickSide,
+  );
+  
+  static const Border thin = Border(
+    top: thinSide,
+    bottom: thinSide,
+    left: thinSide,
+    right: thinSide,
+  );
 }
 
 class NeoShadows {
