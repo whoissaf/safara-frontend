@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'core/constants.dart';
-import 'screens/home_screen.dart';
+import 'screens/splash_screen.dart';
 
 void main() {
   runApp(const SafaraApp());
@@ -18,11 +18,7 @@ class SafaraApp extends StatelessWidget {
       theme: ThemeData(
         useMaterial3: true,
         scaffoldBackgroundColor: NeoColors.background,
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: NeoColors.primary,
-          primary: NeoColors.primary,
-          background: NeoColors.background,
-        ),
+        colorScheme: ColorScheme.fromSeed(seedColor: NeoColors.primary, primary: NeoColors.primary, background: NeoColors.background),
         textTheme: GoogleFonts.rubikTextTheme(),
         appBarTheme: AppBarTheme(
           backgroundColor: NeoColors.surface,
@@ -30,11 +26,7 @@ class SafaraApp extends StatelessWidget {
           elevation: 0,
           scrolledUnderElevation: 0,
           surfaceTintColor: Colors.transparent,
-          titleTextStyle: GoogleFonts.rubik(
-            fontSize: 22,
-            fontWeight: FontWeight.w900,
-            color: NeoColors.text,
-          ),
+          titleTextStyle: GoogleFonts.rubik(fontSize: 22, fontWeight: FontWeight.w900, color: NeoColors.text),
         ),
         bottomNavigationBarTheme: const BottomNavigationBarThemeData(
           backgroundColor: NeoColors.surface,
@@ -50,10 +42,7 @@ class SafaraApp extends StatelessWidget {
             foregroundColor: NeoColors.surface,
             elevation: 0,
             padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg, vertical: AppSpacing.md),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(AppRadius.md),
-              side: NeoBorders.thickSide,
-            ),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppRadius.md), side: NeoBorders.thickSide),
             textStyle: GoogleFonts.rubik(fontSize: 16, fontWeight: FontWeight.w900),
           ),
         ),
@@ -61,13 +50,10 @@ class SafaraApp extends StatelessWidget {
           color: NeoColors.surface,
           elevation: 0,
           margin: EdgeInsets.zero,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(AppRadius.md),
-            side: NeoBorders.thickSide,
-          ),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppRadius.md), side: NeoBorders.thickSide),
         ),
       ),
-      home: const HomeScreen(),
+      home: const SplashScreen(),
     );
   }
 }
