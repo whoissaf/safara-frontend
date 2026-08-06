@@ -52,7 +52,7 @@ class SafaraApp extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg, vertical: AppSpacing.md),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(AppRadius.md),
-              side: NeoBorders.thick,
+              side: NeoBorders.thickSide,
             ),
             textStyle: GoogleFonts.rubik(fontSize: 16, fontWeight: FontWeight.w900),
           ),
@@ -63,7 +63,7 @@ class SafaraApp extends StatelessWidget {
           margin: EdgeInsets.zero,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(AppRadius.md),
-            side: NeoBorders.thick,
+            side: NeoBorders.thickSide,
           ),
         ),
       ),
