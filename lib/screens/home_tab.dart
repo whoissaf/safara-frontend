@@ -5,272 +5,151 @@ import 'location_detail_screen.dart';
 class HomeTab extends StatelessWidget {
   const HomeTab({super.key});
 
-  final List<Map<String, dynamic>> _trendingLocations = const [
-    {'name': 'Monas, Jakarta', 'level': 'Yellow', 'color': AppColors.yellow},
-    {'name': 'Bundaran HI', 'level': 'Green', 'color': AppColors.green},
-    {'name': 'Kota Tua', 'level': 'Orange', 'color': AppColors.orange},
-    {'name': 'Malioboro', 'level': 'Green', 'color': AppColors.green},
-    {'name': 'Pantai Kuta', 'level': 'Yellow', 'color': AppColors.yellow},
-    {'name': 'Borobudur', 'level': 'Green', 'color': AppColors.green},
-    {'name': 'Puncak Bogor', 'level': 'Orange', 'color': AppColors.orange},
-    {'name': 'Ancol Jakarta', 'level': 'Red', 'color': AppColors.red},
+  final List<Map<String, dynamic>> _locations = const [
+    {'name': 'Monas, Jakarta', 'level': 'Yellow', 'color': NeoColors.yellow},
+    {'name': 'Bundaran HI', 'level': 'Green', 'color': NeoColors.green},
+    {'name': 'Kota Tua', 'level': 'Orange', 'color': NeoColors.orange},
+    {'name': 'Malioboro', 'level': 'Green', 'color': NeoColors.green},
+    {'name': 'Pantai Kuta', 'level': 'Yellow', 'color': NeoColors.yellow},
+    {'name': 'Borobudur', 'level': 'Green', 'color': NeoColors.green},
+    {'name': 'Puncak Bogor', 'level': 'Orange', 'color': NeoColors.orange},
+    {'name': 'Ancol Jakarta', 'level': 'Red', 'color': NeoColors.red},
   ];
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final cardWidth = (screenWidth - (AppSpacing.lg * 3)) / 2;
-
     return Scaffold(
-      backgroundColor: AppColors.background,
       appBar: AppBar(
-        title: const Column(
+        title: const Text('Safara'),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: AppSpacing.md),
+            child: CircleAvatar(
+              backgroundColor: NeoColors.accent,
+              child: const Icon(Icons.person, color: NeoColors.black),
+            ),
+          ),
+        ],
+      ),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(AppSpacing.lg),
+        child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              'Hello, Traveler',
-              style: TextStyle(fontSize: 14, color: AppColors.textSecondary),
-            ),
-            Text(
-              'Safara',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            ),
-          ],
-        ),
-        actions: [
-          Container(
-            margin: const EdgeInsets.only(right: AppSpacing.md),
-            decoration: BoxDecoration(
-              color: AppColors.background,
-              shape: BoxShape.circle,
-            ),
-            child: IconButton(
-              icon: const Icon(Icons.notifications_rounded),
-              onPressed: () {},
-            ),
-          ),
-        ],
-      ),
-      body: RefreshIndicator(
-        onRefresh: () async {},
-        child: CustomScrollView(
-          slivers: [
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: const EdgeInsets.all(AppSpacing.lg),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    _buildSearchBar(context),
-                    const SizedBox(height: AppSpacing.xxl),
-                    _buildSectionTitle(context, 'Trending Locations'),
-                    const SizedBox(height: AppSpacing.lg),
-                    _buildTrendingLocations(context, cardWidth),
-                    const SizedBox(height: AppSpacing.xxl),
-                    _buildSectionTitle(context, 'Latest Advisory'),
-                    const SizedBox(height: AppSpacing.lg),
-                    GestureDetector(
-                      onTap: () {},
-                      child: _buildLatestAdvisory(context),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-  
-  Widget _buildSearchBar(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.circular(AppBorderRadius.lg),
-        boxShadow: AppShadows.card,
-      ),
-      child: TextField(
-        decoration: const InputDecoration(
-          hintText: 'Search location...',
-          prefixIcon: Icon(Icons.search_rounded),
-          border: InputBorder.none,
-          contentPadding: EdgeInsets.symmetric(
-            horizontal: AppSpacing.lg,
-            vertical: AppSpacing.md,
-          ),
-        ),
-      ),
-    );
-  }
-  
-  Widget _buildSectionTitle(BuildContext context, String title) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(
-          title,
-          style: Theme.of(context).textTheme.titleLarge,
-        ),
-        TextButton(
-          onPressed: () {},
-          child: const Text('See All'),
-        ),
-      ],
-    );
-  }
-  
-  Widget _buildTrendingLocations(BuildContext context, double cardWidth) {
-    return GridView.builder(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        childAspectRatio: cardWidth / 240,
-        crossAxisSpacing: AppSpacing.lg,
-        mainAxisSpacing: AppSpacing.lg,
-      ),
-      itemCount: _trendingLocations.length,
-      itemBuilder: (context, index) {
-        final location = _trendingLocations[index];
-        return GestureDetector(
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const LocationDetailScreen()),
-            );
-          },
-          child: _buildLocationCard(context, location),
-        );
-      },
-    );
-  }
-  
-  Widget _buildLocationCard(BuildContext context, Map<String, dynamic> location) {
-    return Container(
-      decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.circular(AppBorderRadius.lg),
-        boxShadow: AppShadows.card,
-        border: Border.all(color: AppColors.border),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Expanded(
-            flex: 2,
-            child: Container(
+            Container(
+              padding: const EdgeInsets.all(AppSpacing.lg),
               decoration: BoxDecoration(
-                color: (location['color'] as Color).withOpacity(0.1),
-                borderRadius: const BorderRadius.vertical(
-                  top: Radius.circular(AppBorderRadius.lg),
-                ),
+                color: NeoColors.accent,
+                border: Border.all(color: NeoColors.black, width: 3),
+                boxShadow: NeoShadows.hard,
+                borderRadius: BorderRadius.circular(AppRadius.md),
               ),
-              child: Icon(
-                Icons.location_on_rounded,
-                size: 60,
-                color: location['color'] as Color,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('Hello, Traveler', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700)),
+                  const SizedBox(height: AppSpacing.sm),
+                  Text('Where are you going today?', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w900)),
+                ],
               ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(AppSpacing.md),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            const SizedBox(height: AppSpacing.xl),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  location['name'] as String,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.w600,
-                    fontSize: 14,
-                  ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                const SizedBox(height: AppSpacing.xs),
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: AppSpacing.sm,
-                    vertical: AppSpacing.xs,
-                  ),
-                  decoration: BoxDecoration(
-                    color: (location['color'] as Color).withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(AppBorderRadius.sm),
-                  ),
-                  child: Text(
-                    '${location['level']} - Attention',
-                    style: TextStyle(
-                      color: location['color'] as Color,
-                      fontSize: 11,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ),
+                Text('Trending Locations', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900)),
+                TextButton(onPressed: () {}, child: const Text('See All', style: TextStyle(fontWeight: FontWeight.w900))),
               ],
             ),
-          ),
-        ],
-      ),
-    );
-  }
-  
-  Widget _buildLatestAdvisory(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(AppSpacing.lg),
-      decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.circular(AppBorderRadius.lg),
-        boxShadow: AppShadows.card,
-        border: Border.all(color: AppColors.border),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Container(
-                padding: const EdgeInsets.all(AppSpacing.sm),
-                decoration: BoxDecoration(
-                  color: AppColors.yellow.withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(AppBorderRadius.md),
-                ),
-                child: const Icon(
-                  Icons.info_outline_rounded,
-                  color: AppColors.yellow,
-                  size: 24,
-                ),
+            const SizedBox(height: AppSpacing.md),
+            GridView.builder(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                crossAxisSpacing: AppSpacing.md,
+                mainAxisSpacing: AppSpacing.md,
+                childAspectRatio: 0.85,
               ),
-              const SizedBox(width: AppSpacing.md),
-              const Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Travel Advisory',
-                      style: TextStyle(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 16,
-                      ),
+              itemCount: _locations.length,
+              itemBuilder: (context, index) {
+                final loc = _locations[index];
+                return GestureDetector(
+                  onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const LocationDetailScreen())),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: NeoColors.surface,
+                      border: NeoBorders.thick,
+                      boxShadow: NeoShadows.small,
+                      borderRadius: BorderRadius.circular(AppRadius.md),
                     ),
-                    Text(
-                      'Jakarta, Indonesia',
-                      style: TextStyle(fontSize: 14, color: AppColors.textSecondary),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(
+                          flex: 2,
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: (loc['color'] as Color).withOpacity(0.3),
+                              border: const Border(bottom: NeoBorders.thick),
+                              borderRadius: const BorderRadius.vertical(top: Radius.circular(AppRadius.md)),
+                            ),
+                            child: Center(child: Icon(Icons.location_on, size: 40, color: loc['color'] as Color)),
+                          ),
+                        ),
+                        Expanded(
+                          flex: 1,
+                          child: Padding(
+                            padding: const EdgeInsets.all(AppSpacing.sm),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(loc['name'] as String, style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 13), maxLines: 1, overflow: TextOverflow.ellipsis),
+                                const SizedBox(height: 4),
+                                Container(
+                                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                                  decoration: BoxDecoration(color: loc['color'] as Color, border: Border.all(color: NeoColors.black, width: 2)),
+                                  child: Text('${loc['level']}', style: const TextStyle(fontSize: 10, fontWeight: FontWeight.w900)),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
+                  ),
+                );
+              },
+            ),
+            const SizedBox(height: AppSpacing.xl),
+            Text('Latest Advisory', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900)),
+            const SizedBox(height: AppSpacing.md),
+            Container(
+              padding: const EdgeInsets.all(AppSpacing.lg),
+              decoration: BoxDecoration(
+                color: NeoColors.surface,
+                border: NeoBorders.thick,
+                boxShadow: NeoShadows.hard,
+                borderRadius: BorderRadius.circular(AppRadius.md),
               ),
-              Icon(
-                Icons.chevron_right_rounded,
-                color: AppColors.textTertiary,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Container(padding: const EdgeInsets.all(8), decoration: BoxDecoration(color: NeoColors.yellow, border: NeoBorders.thin), child: const Icon(Icons.warning_amber, size: 24)),
+                      const SizedBox(width: AppSpacing.md),
+                      const Expanded(child: Text('Petty Theft in Tourist Zones', style: TextStyle(fontWeight: FontWeight.w900, fontSize: 16))),
+                    ],
+                  ),
+                  const SizedBox(height: AppSpacing.md),
+                  const Text('Stay alert in crowded areas. Recent reports indicate minor incidents.', style: TextStyle(fontSize: 14)),
+                ],
               ),
-            ],
-          ),
-          const SizedBox(height: AppSpacing.md),
-          const Text(
-            'Stay alert in crowded areas. Recent reports of petty theft in tourist zones.',
-            style: TextStyle(fontSize: 14, color: AppColors.textSecondary),
-          ),
-        ],
+            ),
+          ],
+        ),
       ),
     );
   }

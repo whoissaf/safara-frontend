@@ -7,46 +7,26 @@ class NotificationsTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Notifications'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.done_all_rounded),
-            onPressed: () {},
-          ),
-        ],
-      ),
+      appBar: AppBar(title: const Text('Notifications')),
       body: ListView.separated(
+        padding: const EdgeInsets.all(AppSpacing.lg),
         itemCount: 5,
-        separatorBuilder: (context, index) => const Divider(height: 1),
+        separatorBuilder: (_, __) => const SizedBox(height: AppSpacing.md),
         itemBuilder: (context, index) {
-          return ListTile(
-            leading: Container(
-              padding: const EdgeInsets.all(AppSpacing.sm),
-              decoration: BoxDecoration(
-                color: AppColors.primary.withOpacity(0.1),
-                borderRadius: BorderRadius.circular(AppBorderRadius.md),
-              ),
-              child: Icon(
-                Icons.notifications_rounded,
-                color: AppColors.primary,
+          return GestureDetector(
+            onTap: () => ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Detail: Jakarta status updated to Yellow - Stay alert in crowded areas'), backgroundColor: NeoColors.primary, shape: RoundedRectangleBorder(side: NeoBorders.thin)))),
+            child: Container(
+              padding: const EdgeInsets.all(AppSpacing.md),
+              decoration: BoxDecoration(color: NeoColors.surface, border: NeoBorders.thick, boxShadow: NeoShadows.small, borderRadius: BorderRadius.circular(AppRadius.md)),
+              child: Row(
+                children: [
+                  Container(padding: const EdgeInsets.all(10), decoration: BoxDecoration(color: NeoColors.accent, border: NeoBorders.thin), child: const Icon(Icons.notifications, size: 24)),
+                  const SizedBox(width: AppSpacing.md),
+                  const Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [Text('New Travel Advisory', style: TextStyle(fontWeight: FontWeight.w900)), SizedBox(height: 4), Text('Jakarta status updated to Yellow', style: TextStyle(fontSize: 12))])),
+                  const Icon(Icons.chevron_right),
+                ],
               ),
             ),
-            title: const Text('New Travel Advisory'),
-            subtitle: const Text('Jakarta status updated to Yellow'),
-            trailing: Text(
-              '2h ago',
-              style: Theme.of(context).textTheme.bodySmall,
-            ),
-            onTap: () {
-              // Navigate to notification detail
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('Notification detail: Jakarta status updated to Yellow - Stay alert in crowded areas'),
-                  duration: Duration(seconds: 3),
-                ),
-              );
-            },
           );
         },
       ),

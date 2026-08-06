@@ -10,100 +10,26 @@ class MapTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Map'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.filter_list_rounded),
-            onPressed: () {},
-          ),
-        ],
-      ),
-      body: Stack(
-        children: [
-          FlutterMap(
-            options: const MapOptions(
-              initialCenter: LatLng(-6.2088, 106.8456), // Jakarta
-              initialZoom: 10.0,
-            ),
-            children: [
-              TileLayer(
-                urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                userAgentPackageName: 'com.safara.app',
-              ),
-              MarkerLayer(
-                markers: [
-                  // Monas - Yellow
-                  Marker(
-                    width: 80.0,
-                    height: 80.0,
-                    point: const LatLng(-6.1754, 106.8272),
-                    child: GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => const LocationDetailScreen()),
-                        );
-                      },
-                      child: const Icon(
-                        Icons.location_on_rounded,
-                        color: AppColors.yellow,
-                        size: 40,
-                      ),
-                    ),
-                  ),
-                  // Bundaran HI - Green
-                  Marker(
-                    width: 80.0,
-                    height: 80.0,
-                    point: const LatLng(-6.1944, 106.8229),
-                    child: GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => const LocationDetailScreen()),
-                        );
-                      },
-                      child: const Icon(
-                        Icons.location_on_rounded,
-                        color: AppColors.green,
-                        size: 40,
-                      ),
-                    ),
-                  ),
-                  // Kota Tua - Orange
-                  Marker(
-                    width: 80.0,
-                    height: 80.0,
-                    point: const LatLng(-6.1352, 106.8133),
-                    child: GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => const LocationDetailScreen()),
-                        );
-                      },
-                      child: const Icon(
-                        Icons.location_on_rounded,
-                        color: AppColors.orange,
-                        size: 40,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-          Positioned(
-            bottom: AppSpacing.xxl,
-            right: AppSpacing.lg,
-            child: FloatingActionButton(
-              onPressed: () {},
-              backgroundColor: AppColors.primary,
-              child: const Icon(Icons.my_location_rounded),
+      appBar: AppBar(title: const Text('Map')),
+      body: Padding(
+        padding: const EdgeInsets.all(AppSpacing.lg),
+        child: Container(
+          decoration: BoxDecoration(border: NeoBorders.thick, boxShadow: NeoShadows.hard, borderRadius: BorderRadius.circular(AppRadius.md)),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(AppRadius.md),
+            child: FlutterMap(
+              options: const MapOptions(initialCenter: LatLng(-6.2088, 106.8456), initialZoom: 10.0),
+              children: [
+                TileLayer(urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png', userAgentPackageName: 'com.safara.app'),
+                MarkerLayer(markers: [
+                  Marker(width: 40, height: 40, point: const LatLng(-6.1754, 106.8272), child: GestureDetector(onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const LocationDetailScreen())), child: const Icon(Icons.location_on, color: NeoColors.yellow, size: 40))),
+                  Marker(width: 40, height: 40, point: const LatLng(-6.1944, 106.8229), child: GestureDetector(onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const LocationDetailScreen())), child: const Icon(Icons.location_on, color: NeoColors.green, size: 40))),
+                  Marker(width: 40, height: 40, point: const LatLng(-6.1352, 106.8133), child: GestureDetector(onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const LocationDetailScreen())), child: const Icon(Icons.location_on, color: NeoColors.orange, size: 40))),
+                ]),
+              ],
             ),
           ),
-        ],
+        ),
       ),
     );
   }
