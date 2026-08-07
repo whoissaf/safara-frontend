@@ -1,8 +1,21 @@
 import 'package:flutter/material.dart';
 import '../core/constants.dart';
+import '../services/bookmark_service.dart';
 
-class LocationDetailScreen extends StatelessWidget {
+class LocationDetailScreen extends StatefulWidget {
   const LocationDetailScreen({super.key});
+
+  @override
+  State<LocationDetailScreen> createState() => _LocationDetailScreenState();
+}
+
+class _LocationDetailScreenState extends State<LocationDetailScreen> {
+  bool _isBookmarked = false;
+  final Map<String, dynamic> _currentLocation = {
+    'name': 'Monas, Jakarta',
+    'level': 'Yellow',
+    'color': NeoColors.yellow,
+  };
 
   final List<Map<String, String>> _timeline = const [
     {'date': '02-08-2026 23:25', 'type': 'Community Report', 'status': 'Submitted'},
@@ -12,9 +25,38 @@ class LocationDetailScreen extends StatelessWidget {
   ];
 
   @override
+  void initState() {
+    super.initState();
+    _checkBookmarkStatus();
+  }
+
+  Future<void> _checkBookmarkStatus() async {
+    final status = await BookmarkService.isBookmarked(_currentLocation['name'] as String);
+    setState(() => _isBookmarked = status);
+  }
+
+  Future<void> _toggleBookmark() async {
+    if (_isBookmarked) {
+      await BookmarkService.removeBookmark(_currentLocation['name'] as String);
+    } else {
+      await BookmarkService.addBookmark(_currentLocation);
+    }
+    setState(() => _isBookmarked = !_isBookmarked);
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Location Detail'), leading: IconButton(icon: const Icon(Icons.arrow_back), onPressed: () => Navigator.pop(context))),
+      appBar: AppBar(
+        title: const Text('Location Detail'),
+        leading: IconButton(icon: const Icon(Icons.arrow_back), onPressed: () => Navigator.pop(context)),
+        actions: [
+          IconButton(
+            icon: Icon(_isBookmarked ? Icons.bookmark : Icons.bookmark_border),
+            onPressed: _toggleBookmark,
+          ),
+        ],
+      ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(AppSpacing.lg),
         child: Column(
@@ -22,7 +64,6 @@ class LocationDetailScreen extends StatelessWidget {
           children: [
             const Text('Monas, Jakarta', style: TextStyle(fontSize: 28, fontWeight: FontWeight.w900)),
             const SizedBox(height: AppSpacing.lg),
-            
             Container(
               padding: const EdgeInsets.all(AppSpacing.lg),
               decoration: BoxDecoration(color: NeoColors.yellow, border: NeoBorders.thick, boxShadow: NeoShadows.hard, borderRadius: BorderRadius.circular(AppRadius.md)),
@@ -40,7 +81,6 @@ class LocationDetailScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(height: AppSpacing.lg),
-
             Container(
               padding: const EdgeInsets.all(AppSpacing.lg),
               decoration: BoxDecoration(color: NeoColors.surface, border: NeoBorders.thick, boxShadow: NeoShadows.small, borderRadius: BorderRadius.circular(AppRadius.md)),
@@ -53,7 +93,6 @@ class LocationDetailScreen extends StatelessWidget {
               ]),
             ),
             const SizedBox(height: AppSpacing.lg),
-
             Container(
               padding: const EdgeInsets.all(AppSpacing.lg),
               decoration: BoxDecoration(color: NeoColors.accent, border: NeoBorders.thick, boxShadow: NeoShadows.small, borderRadius: BorderRadius.circular(AppRadius.md)),
@@ -64,7 +103,6 @@ class LocationDetailScreen extends StatelessWidget {
               ]),
             ),
             const SizedBox(height: AppSpacing.lg),
-
             Container(
               padding: const EdgeInsets.all(AppSpacing.lg),
               decoration: BoxDecoration(color: NeoColors.surface, border: NeoBorders.thick, boxShadow: NeoShadows.small, borderRadius: BorderRadius.circular(AppRadius.md)),
@@ -81,7 +119,6 @@ class LocationDetailScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(height: AppSpacing.lg),
-
             const Text('EVIDENCE TIMELINE', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900)),
             const SizedBox(height: AppSpacing.md),
             Container(
