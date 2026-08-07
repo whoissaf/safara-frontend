@@ -56,7 +56,6 @@ class _HomeTabState extends State<HomeTab> {
                 children: [
                   const Text('Advanced Filter', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w900)),
                   const SizedBox(height: AppSpacing.lg),
-                  
                   const Text('Attention Level', style: TextStyle(fontWeight: FontWeight.w900)),
                   const SizedBox(height: AppSpacing.sm),
                   Wrap(
@@ -84,7 +83,6 @@ class _HomeTabState extends State<HomeTab> {
                     }).toList(),
                   ),
                   const SizedBox(height: AppSpacing.lg),
-
                   const Text('Category', style: TextStyle(fontWeight: FontWeight.w900)),
                   const SizedBox(height: AppSpacing.sm),
                   DropdownButtonFormField<String>(
@@ -97,7 +95,6 @@ class _HomeTabState extends State<HomeTab> {
                     },
                   ),
                   const SizedBox(height: AppSpacing.lg),
-
                   Row(
                     children: [
                       const Text('Verified Only', style: TextStyle(fontWeight: FontWeight.w900)),
@@ -113,7 +110,6 @@ class _HomeTabState extends State<HomeTab> {
                     ],
                   ),
                   const SizedBox(height: AppSpacing.lg),
-
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
@@ -165,7 +161,6 @@ class _HomeTabState extends State<HomeTab> {
             const SizedBox(height: AppSpacing.lg),
             Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [const Text('Trending Locations', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900)), TextButton(onPressed: () {}, child: const Text('See All', style: TextStyle(fontWeight: FontWeight.w900)))]),
             const SizedBox(height: AppSpacing.md),
-            
             if (results.isEmpty)
               const EmptyStateWidget(
                 title: 'No Locations Found',
@@ -195,7 +190,6 @@ class _HomeTabState extends State<HomeTab> {
                   );
                 },
               ),
-            
             const SizedBox(height: AppSpacing.xl),
             const Text('Latest Advisory', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900)),
             const SizedBox(height: AppSpacing.md),
