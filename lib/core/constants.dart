@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class AppConstants {
-  static const String baseUrl = 'http://192.168.1.7:8081/api/v1';
+  static const String baseUrl = 'https://attest-childhood-freewill.ngrok-free.dev/api/v1';
   static const String seedUserId = 'c7133c5e-c490-4011-8941-a866dc9adbdd';
   static const String seedLocationId = 'f886cd8f-a0bb-4787-9459-c49d2ea84c4f';
 }
