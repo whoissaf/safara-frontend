@@ -22,7 +22,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
         children: [
           _buildSwitchTile('Theme', 'Dark Mode', _isDarkMode, (val) => setState(() => _isDarkMode = val)),
           _buildSwitchTile('Notification', 'Push Notifications', _isNotifEnabled, (val) => setState(() => _isNotifEnabled = val)),
-          _buildDropdownTile('Language', ['English', 'Bahasa Indonesia'], _selectedLanguage, (val) => setState(() => _selectedLanguage = val)),
+          _buildDropdownTile('Language', ['English', 'Bahasa Indonesia'], _selectedLanguage, (val) {
+            if (val != null) {
+              setState(() => _selectedLanguage = val);
+            }
+          }),
           _buildActionTile('Privacy', 'Manage Data & Permissions', () {}),
         ],
       ),

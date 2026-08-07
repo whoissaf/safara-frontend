@@ -75,7 +75,6 @@ class _HomeTabState extends State<HomeTab> {
                           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                           decoration: BoxDecoration(
                             color: isActive ? NeoColors.primary : NeoColors.surface,
-                            color: isActive ? NeoColors.surface : NeoColors.primary, 
                             border: NeoBorders.thin,
                             borderRadius: BorderRadius.circular(AppRadius.sm),
                           ),
