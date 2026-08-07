@@ -24,6 +24,11 @@ class _LocationDetailScreenState extends State<LocationDetailScreen> {
     {'date': '02-08-2026 23:40', 'type': 'AI Analysis', 'status': 'Generated'},
   ];
 
+  final List<Map<String, String>> _verifiedEvents = const [
+    {'title': 'Pickpocketing Incident', 'category': 'Theft', 'time': '02-08-2026 10:00', 'status': 'Verified'},
+    {'title': 'Suspicious Activity', 'category': 'Violence', 'time': '01-08-2026 15:30', 'status': 'Verified'},
+  ];
+
   @override
   void initState() {
     super.initState();
@@ -64,6 +69,7 @@ class _LocationDetailScreenState extends State<LocationDetailScreen> {
           children: [
             const Text('Monas, Jakarta', style: TextStyle(fontSize: 28, fontWeight: FontWeight.w900)),
             const SizedBox(height: AppSpacing.lg),
+            
             Container(
               padding: const EdgeInsets.all(AppSpacing.lg),
               decoration: BoxDecoration(color: NeoColors.yellow, border: NeoBorders.thick, boxShadow: NeoShadows.hard, borderRadius: BorderRadius.circular(AppRadius.md)),
@@ -81,6 +87,7 @@ class _LocationDetailScreenState extends State<LocationDetailScreen> {
               ),
             ),
             const SizedBox(height: AppSpacing.lg),
+
             Container(
               padding: const EdgeInsets.all(AppSpacing.lg),
               decoration: BoxDecoration(color: NeoColors.surface, border: NeoBorders.thick, boxShadow: NeoShadows.small, borderRadius: BorderRadius.circular(AppRadius.md)),
@@ -93,6 +100,7 @@ class _LocationDetailScreenState extends State<LocationDetailScreen> {
               ]),
             ),
             const SizedBox(height: AppSpacing.lg),
+
             Container(
               padding: const EdgeInsets.all(AppSpacing.lg),
               decoration: BoxDecoration(color: NeoColors.accent, border: NeoBorders.thick, boxShadow: NeoShadows.small, borderRadius: BorderRadius.circular(AppRadius.md)),
@@ -103,6 +111,7 @@ class _LocationDetailScreenState extends State<LocationDetailScreen> {
               ]),
             ),
             const SizedBox(height: AppSpacing.lg),
+
             Container(
               padding: const EdgeInsets.all(AppSpacing.lg),
               decoration: BoxDecoration(color: NeoColors.surface, border: NeoBorders.thick, boxShadow: NeoShadows.small, borderRadius: BorderRadius.circular(AppRadius.md)),
@@ -118,6 +127,40 @@ class _LocationDetailScreenState extends State<LocationDetailScreen> {
                 ],
               ),
             ),
+            const SizedBox(height: AppSpacing.lg),
+
+            const Text('VERIFIED EVENTS', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900)),
+            const SizedBox(height: AppSpacing.md),
+            Column(
+              children: _verifiedEvents.map((event) {
+                return Container(
+                  margin: const EdgeInsets.only(bottom: AppSpacing.md),
+                  padding: const EdgeInsets.all(AppSpacing.md),
+                  decoration: BoxDecoration(color: NeoColors.surface, border: NeoBorders.thin, borderRadius: BorderRadius.circular(AppRadius.sm)),
+                  child: Row(
+                    children: [
+                      Container(width: 4, height: 40, color: NeoColors.primary),
+                      const SizedBox(width: AppSpacing.md),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(event['title']!, style: const TextStyle(fontWeight: FontWeight.w900)),
+                            Text('${event['category']} • ${event['time']}', style: const TextStyle(fontSize: 12)),
+                          ],
+                        ),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                        decoration: BoxDecoration(color: NeoColors.green, border: NeoBorders.thin),
+                        child: const Text('VERIFIED', style: TextStyle(fontSize: 10, fontWeight: FontWeight.w900)),
+                      ),
+                    ],
+                  ),
+                );
+              }).toList(),
+            ),
+
             const SizedBox(height: AppSpacing.lg),
             const Text('EVIDENCE TIMELINE', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900)),
             const SizedBox(height: AppSpacing.md),
